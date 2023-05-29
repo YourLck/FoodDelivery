@@ -20,20 +20,21 @@ struct ProductCell: View {
 //                .aspectRatio(contentMode: .fill)
                 .frame(maxWidth: screen.width * 0.45)
                 .clipped()
-                .cornerRadius(16)
+                .cornerRadius(18)
             HStack {
                 Text(product.title)
                     Spacer()
 //                    .font()
                 Text("\(product.price) $")
             }
-            .padding(.horizontal, 4)
-            .padding(.bottom, 6)
-            .padding(.top, 5)
+            .padding(.horizontal, 1)
+            .padding(.bottom, 5)
+            .padding(.top, 3)
         } .frame(width: screen.width * 0.4,
                  height: screen.height * 0.25,
                  alignment: .center)
         .shadow(radius: 3)
+        .padding(.top, 5)
 
     }
 }
@@ -44,6 +45,7 @@ struct ProductCell_Previews: PreviewProvider {
                                      title: "4Cheese",
                                      imageUrl: "Not found",
                                      price: 100,
+                                     weight: "450 g",
                                      descript: "Composition: cheese, olives"))
     }
 }

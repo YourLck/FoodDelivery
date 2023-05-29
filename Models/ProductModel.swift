@@ -13,6 +13,7 @@ struct ProductModel {
     var title: String
     var imageUrl: String
     var price: Int
+    var weight: String
     var descript: String
     
 //    var ordersCount: Int

@@ -19,10 +19,13 @@ struct MenuView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHGrid(rows: layoutForRecomeds,
                               alignment: .center,
-                              spacing: 35) {
+                              spacing: 40) {
                         ForEach(MenuViewModel.shared.RecomendsProducts, id: \.id) { item in
                             NavigationLink {
-                                ProductDetailView(product: item)
+                                
+                                let viewModel = ProductDetailViewModel(product: item)
+                                
+                                ProductDetailView(viewModel: viewModel)
                             } label: {
                                 ProductCell(product: item)
                                     .foregroundColor(.black)
@@ -36,10 +39,13 @@ struct MenuView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVGrid(columns: layoutForRolls,
                               alignment: .center,
-                              spacing: 20 ) {
+                              spacing: 10 ) {
                         ForEach(MenuViewModel.shared.RollsProducts, id: \.id) { item in
                             NavigationLink {
-                                ProductDetailView(product: item)
+                                
+                                let viewModel = ProductDetailViewModel(product: item)
+                                
+                                ProductDetailView(viewModel: viewModel)
                             } label: {
                                 ProductCell(product: item)
                                     .foregroundColor(.black)
