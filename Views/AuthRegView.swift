@@ -11,11 +11,9 @@ import SwiftUI
 struct AuthRegView: View {
     
     @State private var isAuth = true
-    
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    
     @State private var isTabBarViewShow = false
     
     

@@ -40,5 +40,4 @@ class ProductDetailViewModel: ObservableObject {
             return ""
         }
     }
-    
 } 

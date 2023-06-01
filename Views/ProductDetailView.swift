@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct ProductDetailView: View {
+    
+    var viewModel: ProductDetailViewModel
+        
+    @State var size = "Medium(30)"
+    @State var weight = "500 g"
     @State var countProduct = 1
     
-        var viewModel: ProductDetailViewModel
-        
-        @State var size = "Medium(30)"
-        @State var weight = "500 g"
-        
+    @Environment(\.presentationMode) var presentationMode
+    
         var body: some View {
             VStack {
                 
@@ -43,9 +45,6 @@ struct ProductDetailView: View {
                         .font(.title2)
                     //                Spacer()
                     
-                    Stepper("Quantity", value: $countProduct, in: 1...10)
-                        .padding()
-                    
                     Picker("Size" , selection: $size) {
                         ForEach(viewModel.sizes, id: \.self ) { item in
                             Text(item)
@@ -54,11 +53,26 @@ struct ProductDetailView: View {
                     .pickerStyle(.segmented)
                     .padding()
                 }
-                //        .ignoresSafeArea()
+                
+                HStack {
+                    Stepper("Quantity", value: $countProduct, in: 1...10)
+                        .padding()
+                    
+                    Text("\(self.countProduct)")
+                        .padding(.leading, 22)
+                }
+                .padding(.horizontal)
                 Spacer()
                 
                 Button {
-                    print("Add to cart!")
+                    var position = PositionModel(id: UUID().uuidString ,
+                                                 product: viewModel.product,
+                                                 count: self.countProduct)
+                    position.product.price = viewModel.selectionSize(size: size)
+
+                    CartViewModel.shared.addPosition(position)
+                    presentationMode.wrappedValue.dismiss()
+                    
                 } label: {
                     Text("Add to cart!")
                         .padding()
@@ -67,8 +81,8 @@ struct ProductDetailView: View {
                         .background(Color("roseRed"))
                         .foregroundColor(Color.black)
                         .cornerRadius(20)
-
                 }
+                //        .ignoresSafeArea()
             }
         }
     }
@@ -82,9 +96,5 @@ struct ProductDetailView_Previews: PreviewProvider {
                                                           price: 120,
                                                           weight: "450 g",
                                                           descript: "Composition: cheese, olives")))
-                                                          
-        
-        
-
     }
 }

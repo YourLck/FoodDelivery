@@ -35,7 +35,6 @@ struct ProductCell: View {
                  alignment: .center)
         .shadow(radius: 3)
         .padding(.top, 5)
-
     }
 }
 

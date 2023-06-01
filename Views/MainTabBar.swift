@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabBar: View {
     var body: some View {
+        
         TabView {
             
             NavigationView {
@@ -17,15 +18,15 @@ struct MainTabBar: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "fork.knife.circle.fill")
-                        Text("Меню")
+                        Text("Menu")
                     }
                 }
             
-            CartView()
+            CartView(viewModel: CartViewModel.shared )
                 .tabItem {
                     VStack {
                         Image(systemName: "cart.fill")
-                        Text("Корзина")
+                        Text("Cart")
                     }
                 }
             
@@ -33,7 +34,7 @@ struct MainTabBar: View {
                 .tabItem {
                     VStack {
                         Image(systemName: "person")
-                        Text("Профиль")
+                        Text("Profile")
                     }
                 }
         }
