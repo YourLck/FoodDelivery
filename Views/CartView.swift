@@ -16,16 +16,17 @@ struct CartView: View {
         VStack {
             List(viewModel.positions) { position in
                 PositionCell(position: position)
-//                    .swipeActions {
-//                        Button {
-//                            viewModel.positions.removeAll { pos in
-//                                pos.id == position.id
-//                            }
-//                        } label: {
-//                            Text("Dell")
-//                        }.tint(.red)
-//                    }
-            }
+                    .swipeActions {
+                        Button {
+                            viewModel.positions.removeAll { pos in
+                                pos.id == position.id
+                            }
+                        } label: {
+                            Text("Delete")
+                        }
+                        .tint(.red)
+                    }
+                }
                     .listStyle(.plain)
                     .navigationTitle("Cart")
                 
@@ -71,10 +72,8 @@ struct CartView: View {
         }
     }
 
-    struct CartView_Previews: PreviewProvider {
-        static var previews: some View {
-            CartView(viewModel: CartViewModel.shared)
-        }
+struct CartView_Previews: PreviewProvider {
+    static var previews: some View {
+        CartView(viewModel: CartViewModel.shared)
     }
-    
-
+}
