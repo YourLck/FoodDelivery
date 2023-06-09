@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct AuthRegView: View {
     
     @State private var isAuth = true
@@ -15,7 +14,8 @@ struct AuthRegView: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     @State private var isTabBarViewShow = false
-    
+    @State private var isShowAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         VStack(spacing: 20) {
@@ -34,7 +34,7 @@ struct AuthRegView: View {
                     .padding(8)
                     .padding(.horizontal, 12)
                 
-                SecureField("Введите пароль", text: $password)
+                SecureField("Введите пароль", text: $confirmPassword)
                     .padding()
                     .background(Color("transparence"))
                     .cornerRadius(15)
@@ -53,13 +53,32 @@ struct AuthRegView: View {
                 Button {
                     if isAuth {
                         print("Авторизация")
-                        isTabBarViewShow.toggle() 
+                        isTabBarViewShow.toggle()
                     } else {
                         print("Регистрация")
-                        self.email = ""
-                        self.password = ""
-                        self.confirmPassword = ""
-                        self.isAuth.toggle()
+                        guard password == confirmPassword else {
+                            self.alertMessage = "Passwords don't match!"
+                            self.isShowAlert.toggle()
+                            return
+                        }
+                        AuthService.shared.signUp(email: self.email,
+                                                  password: self.password) { result in
+                            switch result {
+                            
+                            case .success(let user):
+                                alertMessage = "You have registered an email \(user.email!)!"
+                                self.isShowAlert.toggle()
+                                self.email = ""
+                                self.password = ""
+                                self.confirmPassword = ""
+                                self.isAuth.toggle()
+                                
+                            case .failure(let error):
+                                alertMessage = "Registration error! \(error.localizedDescription)"
+                                self.isShowAlert.toggle()
+                            }
+                        }
+//                        print("Регистрация")
                     }
                 } label: {
                     Text(isAuth ? "Войти" : "Зарегистрироваться")
@@ -90,6 +109,12 @@ struct AuthRegView: View {
             .background(Color("transparence"))
             .cornerRadius(25)
             .padding(15)
+            .alert(alertMessage,
+                   isPresented: $isShowAlert) {
+                Button { } label: {
+                    Text("OK")
+                }
+            }
             
         } .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Image("spaceBackgroundEdit")
