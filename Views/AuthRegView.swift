@@ -13,7 +13,7 @@ struct AuthRegView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    @State private var isTabBarViewShow = false
+    @State private var isTabViewShow = false
     @State private var isShowAlert = false
     @State private var alertMessage = ""
     
@@ -34,7 +34,7 @@ struct AuthRegView: View {
                     .padding(8)
                     .padding(.horizontal, 12)
                 
-                SecureField("Введите пароль", text: $confirmPassword)
+                SecureField("Введите пароль", text: $password)
                     .padding()
                     .background(Color("transparence"))
                     .cornerRadius(15)
@@ -42,7 +42,7 @@ struct AuthRegView: View {
                     .padding(.horizontal, 12)
                 
                 if !isAuth {
-                    SecureField("Повторите пароль", text: $password)
+                    SecureField("Повторите пароль", text: $confirmPassword)
                         .padding()
                         .background(Color("transparence"))
                         .cornerRadius(15)
@@ -53,7 +53,19 @@ struct AuthRegView: View {
                 Button {
                     if isAuth {
                         print("Авторизация")
-                        isTabBarViewShow.toggle()
+                        AuthService.shared.signIn(email: self.email,
+                                                  password: self.password) { result in
+                            switch result {
+                                
+                            case .success(_):
+                                isTabViewShow.toggle()
+                                
+                            case .failure(let error):
+                                alertMessage = "Authorization error\(error.localizedDescription)"
+                                isShowAlert.toggle()
+                            }
+                        }
+//                        isTabViewShow.toggle()
                     } else {
                         print("Регистрация")
                         guard password == confirmPassword else {
@@ -67,6 +79,7 @@ struct AuthRegView: View {
                             
                             case .success(let user):
                                 alertMessage = "You have registered an email \(user.email!)!"
+// Fix the optionals
                                 self.isShowAlert.toggle()
                                 self.email = ""
                                 self.password = ""
@@ -121,8 +134,11 @@ struct AuthRegView: View {
             .ignoresSafeArea()
             .blur(radius: isAuth ? 0 : 3))
         .animation(Animation.easeOut(duration: 0.4), value: isAuth)
-        .fullScreenCover(isPresented: $isTabBarViewShow) {
-            MainTabBar()
+        .fullScreenCover(isPresented: $isTabViewShow) {
+            
+            let mainTabBarViewModel = MainTabBarViewModel(user: AuthService.shared.currentUser!)
+// Fix the optionals
+            MainTabBar(viewModel: mainTabBarViewModel)
         }
     }
 }
